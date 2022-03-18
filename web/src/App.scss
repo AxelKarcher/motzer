@@ -4,17 +4,52 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   background-color: grey;
   font-size: 50px;
 
   #cells {
+    height: 50%;
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
+    margin-bottom: 15px;
 
     .cellsRow {
       display: flex;
       margin-bottom: 3px;
     }
+  }
+
+  #btns {
+    display: grid;
+    grid-template-columns: repeat(10, calc(1em + 17px));
+    gap: 5px;
+    justify-content: center;
+
+    Button {
+      background-color: black;
+      font-size: 18px;
+
+      &:hover {
+        background-color: rgb(37, 37, 37);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  #infosText {
+    position: absolute;
+    left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
+    color: rgb(211, 211, 211);
+    margin: 10px;
+    text-shadow: 2px 2px 2px black;
   }
 }
