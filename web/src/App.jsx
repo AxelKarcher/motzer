@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react'
+import {useState, useEffect} from 'react'
 import Button from '@mui/material/Button'
 import axios from 'axios'
-import { RiDeleteBack2Fill } from 'react-icons/ri'
-import { VscDebugRestart } from 'react-icons/vsc'
+import {RiDeleteBack2Fill} from 'react-icons/ri'
+import {VscDebugRestart} from 'react-icons/vsc'
 
 import './App.scss'
 import Cell from './components/Cell.jsx'
 
-function App() {
+const App = () => {
 
   const abc = 'azertyuiopqsdfghjklmwxcvbn'
 
@@ -17,10 +17,10 @@ function App() {
   const [tryNb, setTryNb] = useState(0)
   const [compo, setCompo] = useState()
 
-  useEffect(() => { getNewWord() }, [])
+  useEffect(() => {getNewWord()}, [])
 
   useEffect(() => {
-    if (word === undefined) { return }
+    if (word === undefined) {return}
 
     getWordCompo()
   }, [word])
@@ -39,7 +39,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (word === undefined || (tries[tryNb]?.length !== word?.length)) { return }
+    if (word === undefined || (tries[tryNb]?.length !== word?.length)) {return }
 
     let newColors = [...colors]
     let currColor = Array(word.length)
@@ -70,12 +70,12 @@ function App() {
   }, [tries])
 
   const getNewWord = () => {
-    axios.get('http://localhost:8000')
-    .then(res => setWord(res.data))
+    axios.get('http://localhost:8080/word')
+      .then((res) => setWord(res?.data?.word))
   }
 
   const addToUserInput = (char) => {
-    if (tryNb === -1) { return }
+    if (tryNb === -1) {return }
 
     let newTries = [...tries]
 
@@ -104,29 +104,24 @@ function App() {
   }
 
   return (
-    <div id='appContainer'>
-      <img
-        src={ require('./assets/logo.png') }
-        alt='logo'
-        height='15%'
-      />
+    <div id='app-container'>
+      <img src={require('./assets/logo.png')} alt='' height='15%' />
       <div id='cells'>
         {
-          word !== undefined ?
+          word
+          ?
           [0, 1, 2, 3, 4].map((elem1, i) => (
             <div key={ i } className='cellsRow'>
-              {
-                word.split('').map((elem2, i) => (
-                  <Cell
-                    key={ i }
-                    index={ i }
-                    id={ elem1 }
-                    userInput={ tries[elem1].join('').toUpperCase() }
-                    colors={ colors[elem1] }
-                    tryNb={ tryNb }
-                  />
-                ))
-              }
+              {word.split('').map((elem2, i) => (
+                <Cell
+                  key={ i }
+                  index={ i }
+                  id={ elem1 }
+                  userInput={ tries[elem1].join('').toUpperCase() }
+                  colors={ colors[elem1] }
+                  tryNb={ tryNb }
+                />
+              ))}
             </div>
           ))
           :
@@ -134,29 +129,22 @@ function App() {
         }
       </div>
       <div id='btns'>
-        {
-          abc.split('').map((elem, i) => (
-            <Button
-              key={ i }
-              onClick={() => addToUserInput(elem)}
-              variant='contained'
-            >{ elem.toUpperCase() }</Button>
-          ))
-        }
-        <Button
-          onClick={() => erase() }
-          variant='contained'
-        ><RiDeleteBack2Fill size={ 23 }/></Button>
-
-        <Button
-          onClick={() => restart() }
-          variant='contained'
-        ><VscDebugRestart size={ 23 }/></Button>
+        {abc.split('').map((elem, i) => (
+          <Button key={i} onClick={() => addToUserInput(elem)} variant='contained'>
+            {elem.toUpperCase()}
+          </Button>
+        ))}
+        <Button onClick={() => erase()} variant='contained'>
+          <RiDeleteBack2Fill size={23} />
+        </Button>
+        <Button onClick={() => restart()} variant='contained'>
+          <VscDebugRestart size={23} />
+        </Button>
       </div>
       <div id='infosText'>
         <div>Il n'y a pas de mot avec accent(s)</div>
-        <div>En <span style={{ color: 'yellow' }}>jaune</span>: la lettre est dans le mot</div>
-        <div>En <span style={{ color: '#39FF14' }}>vert</span>: la lettre est au bon endroit</div>
+        <div>En <span style={{color: 'yellow'}}>jaune</span>: la lettre est dans le mot</div>
+        <div>En <span style={{color: 'lime'}}>vert</span>: la lettre est au bon endroit</div>
       </div>
     </div>
   )
